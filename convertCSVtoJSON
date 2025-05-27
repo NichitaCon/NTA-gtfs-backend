@@ -1,0 +1,21 @@
+const csv = require("csvtojson");
+const fs = require("fs");
+const path = require("path");
+
+// Change this path to wherever your stops.txt file is
+const stopsFilePath = path.join(__dirname, "/assets/rawData/AllStaticText/stop_times.txt");
+if (!fs.existsSync(stopsFilePath)) {
+    console.error(
+        "The stops.txt file does not exist at the specified path:",
+        stopsFilePath
+    );
+    process.exit(1);
+}
+const outputPath = path.join(__dirname, "/assets/convertedData/stop_times.json");
+
+csv()
+    .fromFile(stopsFilePath)
+    .then((jsonObj) => {
+        fs.writeFileSync(outputPath, JSON.stringify(jsonObj, null, 2));
+        console.log("Stops converted and saved to:", outputPath);
+    });
